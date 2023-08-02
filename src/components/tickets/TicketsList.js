@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Table } from "reactstrap";
-import { getServiceTickets } from "../../data/serviceTicketsData";
+import { deleteSingleTicket, getServiceTickets } from "../../data/serviceTicketsData";
 import { Link } from "react-router-dom";
 
 export default function TicketsList() {
@@ -9,6 +9,12 @@ export default function TicketsList() {
   useEffect(() => {
     getServiceTickets().then(setTickets);
   }, []);
+
+  const deleteThisTicket = (id) => {
+    deleteSingleTicket(id);
+    setTickets(tickets);
+    console.warn('deleted ticket');
+  };
 
   return (
     <Table>
@@ -31,6 +37,7 @@ export default function TicketsList() {
             <td>
               <Link to={`${t.id}`}>Details</Link>
             </td>
+            <td><button onClick={() => deleteThisTicket(t.id)}>Delete</button></td>
           </tr>
         ))}
       </tbody>
