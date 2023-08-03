@@ -16,5 +16,16 @@ export const deleteSingleTicket = (id) => {
       'Content-Type': 'application/json',
     }
   })
-  .then(r => r.json);
+  .then(r => r.json());
+};
+
+export const completeTicket = (id) => {
+  return fetch(`/servicetickets/${id}/complete`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(r => r.json())
+  .then(datares => console.log(datares));
 };
