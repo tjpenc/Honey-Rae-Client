@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Table } from "reactstrap";
-import { deleteSingleTicket, getServiceTickets } from "../../data/serviceTicketsData";
+import { completeTicket, deleteSingleTicket, getServiceTickets } from "../../data/serviceTicketsData";
 import { Link } from "react-router-dom";
 
 export default function TicketsList() {
@@ -11,9 +11,13 @@ export default function TicketsList() {
   }, []);
 
   const deleteThisTicket = (id) => {
-    deleteSingleTicket(id);
-    setTickets(tickets);
+    deleteSingleTicket(id).then(getServiceTickets().then(setTickets));
     console.warn('deleted ticket');
+  };
+
+  const completeThisTicket = (id) => {
+    completeTicket(id).then(getServiceTickets().then(setTickets));
+    console.warn("completed");
   };
 
   return (
@@ -38,6 +42,15 @@ export default function TicketsList() {
               <Link to={`${t.id}`}>Details</Link>
             </td>
             <td><button onClick={() => deleteThisTicket(t.id)}>Delete</button></td>
+            {t.customerId && !t.dateCompleted
+            ? (
+              <td>
+                <button onClick={() => completeThisTicket(t.id)}>Complete Order</button>
+              </td>
+            )
+            : ""
+            }
+            {console.warn(t)}
           </tr>
         ))}
       </tbody>
